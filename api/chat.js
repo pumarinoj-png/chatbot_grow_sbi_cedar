@@ -118,12 +118,13 @@ async function llamarClaude({ system, messages, max_tokens, temperature }) {
       'x-api-key': process.env.ANTHROPIC_API_KEY,
       'anthropic-version': '2023-06-01'
     },
-    body: JSON.stringify({ model: MODEL, system, messages, max_tokens, temperature })
+    body: JSON.stringify({ model: MODEL, system, messages, max_tokens })
   });
   const data = await r.json().catch(() => ({}));
   if (!r.ok) {
     console.error('Error Anthropic:', r.status, JSON.stringify(data));
-    throw new Error('El servicio de IA no respondió. Intenta de nuevo en unos segundos.');
+    const detalle = (data && data.error && data.error.message) ? data.error.message : 'sin detalle';
+    throw new Error(`El servicio de IA respondió con error ${r.status}: ${detalle}`);
   }
   return (data.content || []).filter(b => b.type === 'text').map(b => b.text).join('').trim();
 }
