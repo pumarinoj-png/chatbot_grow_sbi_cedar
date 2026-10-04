@@ -114,7 +114,12 @@ dialog::backdrop{background:rgba(23,35,58,.55)}
 .loading{padding:36px 0;text-align:center;color:var(--muted)}
 .avg{display:flex;align-items:center;gap:18px;padding:16px 18px;background:var(--soft);border:1px solid var(--line);border-radius:12px;margin-bottom:18px}
 .avg .num{font-family:var(--display);font-weight:700;font-size:52px;line-height:1;color:var(--accent)}
-.avg .cap{color:var(--muted)}
+.avg .cap{display:flex;flex-direction:column;gap:2px}
+.avg .cap .ver{color:var(--ink);font-size:15.5px}
+.checks{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 0;padding:0}
+.checks li{font-size:14px;font-weight:600;padding:3px 11px;border-radius:99px;border:1px solid var(--line)}
+.checks li.ok{background:#E4F3EC;border-color:#A9D7C0;color:#17523D}
+.checks li.no{background:#F5F7FA;color:var(--muted)}
 .aspect{padding:14px 0;border-top:1px solid var(--line)}
 .aspect .row{display:flex;justify-content:space-between;gap:12px;font-weight:600}
 .bar{height:8px;background:#E3E8EF;border-radius:99px;margin:8px 0;overflow:hidden}
@@ -216,10 +221,10 @@ const MODELS = {
     sub:'Prepara una conversación para acompañar el crecimiento de otra persona. Completa la pauta con preguntas más que con respuestas.',
     situationHint:'¿Quién es esta persona, en qué momento profesional está y por qué quieres conversar sobre su desarrollo?',
     steps:[
-      {k:'G',name:'Goal (Meta)',q:'¿Qué quiere lograr esta persona y qué te gustaría explorar con ella sobre su desarrollo?'},
-      {k:'R',name:'Reality (Realidad)',q:'¿Dónde está hoy respecto de esa meta y qué la está frenando?'},
-      {k:'O',name:'Options (Opciones)',q:'¿Qué alternativas podría considerar y qué preguntas le harás para que las descubra ella misma?'},
-      {k:'W',name:'Will (Voluntad)',q:'¿A qué se comprometerá, para cuándo y cómo sabrán que avanzó?'}
+      {k:'G',name:'Goal (Meta)',q:'¿Qué meta o aspiración de desarrollo tiene (o podría tener) esta persona? ¿Qué le preguntarás para que la ponga en palabras?'},
+      {k:'R',name:'Reality (Realidad)',q:'¿Cómo está hoy respecto de esa meta? ¿Qué le está frenando y qué preguntas le harás para que lo vea con claridad?'},
+      {k:'O',name:'Options (Opciones)',q:'¿Qué caminos podría explorar para acercarse a su meta? ¿Qué preguntas le harás para que sea esta persona quien los descubra?'},
+      {k:'W',name:'Will (Voluntad)',q:'¿Qué elegirá hacer y para cuándo? ¿Qué apoyo necesita de ti y cómo sabrán que avanzó?'}
     ]
   },
   SBI:{
@@ -229,10 +234,10 @@ const MODELS = {
     sub:'Prepara un feedback basado en un hecho concreto. Cuanto más observable sea lo que describes, más fácil será conversarlo.',
     situationHint:'¿Qué ocurrió y por qué quieres conversarlo con esta persona?',
     steps:[
-      {k:'S',name:'Situación (el momento concreto)',q:'¿Cuándo y dónde ocurrió? Ancla la conversación en un momento específico.'},
-      {k:'B',name:'Conducta',q:'¿Qué hizo o dijo exactamente? Describe lo observable, sin interpretaciones ni juicios.'},
-      {k:'I',name:'Impacto',q:'¿Qué efecto tuvo en los resultados, en el equipo o en ti?'},
-      {k:'+',name:'Siguiente paso',q:'¿Qué le pedirás o acordarán para repetirlo (si es positivo) o ajustarlo (si es constructivo)?'}
+      {k:'S',name:'Situación (el momento concreto)',q:'¿En qué momento y lugar concreto ocurrió? Por ejemplo: "en la reunión del martes con el cliente".'},
+      {k:'B',name:'Conducta',q:'¿Qué hizo o dijo exactamente? Describe lo que cualquiera habría visto u oído, sin interpretaciones ni juicios.'},
+      {k:'I',name:'Impacto',q:'¿Qué efecto tuvo esa conducta en los resultados, en el equipo o en ti? ¿Cómo le preguntarás cómo lo vivió?'},
+      {k:'+',name:'Siguiente paso',q:'¿Qué le pedirás o acordarán para repetirlo (si fue positivo) o para ajustarlo (si fue constructivo)?'}
     ]
   },
   CEDAR:{
@@ -242,11 +247,11 @@ const MODELS = {
     sub:'Prepara una conversación sobre un patrón de rendimiento. Llega con ejemplos concretos y con curiosidad por la mirada de la otra persona.',
     situationHint:'¿Qué patrón se repite y por qué ya no puede ignorarse?',
     steps:[
-      {k:'C',name:'Contexto',q:'¿Qué se espera de su rol y por qué es importante conversar ahora?'},
-      {k:'E',name:'Ejemplos',q:'¿Qué dos o tres ejemplos concretos muestran el patrón?'},
-      {k:'D',name:'Diagnóstico',q:'¿Qué crees que está pasando y qué le preguntarás para entender su mirada?'},
-      {k:'A',name:'Acción',q:'¿Qué acciones concretas puede tomar cada uno?'},
-      {k:'R',name:'Revisión',q:'¿Cuándo y cómo revisarán los avances?'}
+      {k:'C',name:'Contexto',q:'¿Qué se espera de esta persona en su rol y qué hace necesario conversar ahora?'},
+      {k:'E',name:'Ejemplos',q:'¿Qué dos o tres ejemplos concretos (fechas, hechos, resultados) muestran el patrón?'},
+      {k:'D',name:'Diagnóstico',q:'¿Qué crees que explica el patrón (claridad, habilidades, motivación, carga, recursos)? ¿Qué le preguntarás para contrastarlo con su mirada?'},
+      {k:'A',name:'Acción',q:'¿Qué acciones concretas harán para cambiar el patrón, cada uno por su lado? ¿Qué te toca a ti?'},
+      {k:'R',name:'Revisión',q:'¿Cuándo volverán a reunirse y qué señal mostrará que el patrón cambió?'}
     ]
   }
 };
@@ -459,8 +464,7 @@ $('#btn-restart').addEventListener('click', ()=>{
 });
 $('#btn-exit').addEventListener('click', ()=>{
   if(!confirm('¿Salir del ejemplo? Volverás al inicio y se perderá esta conversación y su pauta.')) return;
-  state.model=null; state.data=null; state.messages=[];
-  goTo(1);
+  exitExample();
 });
 $('#back1').addEventListener('click', backToStart);
 
@@ -490,6 +494,12 @@ async function askFeedback(){
   }finally{ setBusy(false); }
 }
 
+function exitExample(){
+  if(fbDialog.open) fbDialog.close();
+  state.model=null; state.data=null; state.messages=[];
+  goTo(1);
+}
+
 function renderFeedback(fb){
   const aspects = (fb.aspectos||[]).slice(0,5).map(a=>({
     nombre:String(a.nombre||''), puntaje:Math.max(0,Math.min(100,Math.round(Number(a.puntaje)||0))), comentario:String(a.comentario||'')
@@ -498,14 +508,29 @@ function renderFeedback(fb){
   fbBody.innerHTML = '';
   const h = document.createElement('h2'); h.id='fb-title'; h.textContent='Feedback de tu conversación';
   const box = document.createElement('div'); box.className='avg';
-  box.innerHTML = `<div class="num">${avg}%</div><div class="cap">Promedio final de tu práctica ${MODELS[state.model].acr} con ${'<span></span>'}</div>`;
-  box.querySelector('.cap span').textContent = state.data.nombre;
+  box.innerHTML = `<div class="num">${avg}%</div><div class="cap"><strong>Promedio final</strong><span class="ver"></span></div>`;
+  const ver = box.querySelector('.ver');
+  ver.textContent = fb.veredicto ? String(fb.veredicto) : `Práctica ${MODELS[state.model].acr} con ${state.data.nombre}.`;
   fbBody.append(h, box);
-  aspects.forEach(a=>{
+
+  const steps = MODELS[state.model].steps;
+  const pasos = Array.isArray(fb.pasos) ? fb.pasos : [];
+  aspects.forEach((a,idx)=>{
     const el = document.createElement('div'); el.className='aspect';
     el.innerHTML = `<div class="row"><span class="n"></span><span>${a.puntaje}%</span></div><div class="bar"><b style="width:${a.puntaje}%"></b></div><p class="c"></p>`;
     el.querySelector('.n').textContent = a.nombre;
     el.querySelector('.c').textContent = a.comentario;
+    if(idx===3 && pasos.length){
+      const ul = document.createElement('ul'); ul.className='checks'; ul.setAttribute('aria-label','Pasos del modelo');
+      steps.forEach((s,i)=>{
+        const ok = !!(pasos[i] && pasos[i].cumple);
+        const li = document.createElement('li'); li.className = ok ? 'ok' : 'no';
+        li.textContent = (ok ? '✓ ' : '✗ ') + s.name.split(' (')[0];
+        li.title = ok ? 'Paso cumplido' : 'Paso que faltó';
+        ul.appendChild(li);
+      });
+      el.appendChild(ul);
+    }
     fbBody.appendChild(el);
   });
   const tips = (fb.tips||[]).slice(0,3);
@@ -516,9 +541,11 @@ function renderFeedback(fb){
     fbBody.appendChild(t);
   }
   const acts = document.createElement('div'); acts.className='fbactions';
+  const exit = document.createElement('button'); exit.className='btn'; exit.textContent='Salir del ejemplo';
+  exit.addEventListener('click', exitExample);
   const close = document.createElement('button'); close.className='btn primary'; close.textContent='Seguir practicando';
   close.addEventListener('click', ()=>fbDialog.close());
-  acts.appendChild(close); fbBody.appendChild(acts);
+  acts.append(exit, close); fbBody.appendChild(acts);
   fbBody.scrollTop = 0;
 }
 
