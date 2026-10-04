@@ -30,6 +30,13 @@ const COMPORTAMIENTO = {
 - Aceptas acciones y una revisión solo cuando la conversación llegó a un acuerdo razonable.`
 };
 
+
+const PASOS = {
+  GROW: ['Goal (Meta)', 'Reality (Realidad)', 'Options (Opciones)', 'Will (Voluntad)'],
+  SBI: ['Situación', 'Conducta', 'Impacto', 'Siguiente paso'],
+  CEDAR: ['Contexto', 'Ejemplos', 'Diagnóstico', 'Acción', 'Revisión']
+};
+
 const MODELOS = {
   GROW: 'GROW (Goal, Reality, Options, Will): conversación de desarrollo centrada en el crecimiento de la otra persona.',
   SBI: 'SBI (Situación, Conducta, Impacto + siguiente paso): conversación de feedback sobre un comportamiento concreto, positivo o constructivo.',
@@ -79,24 +86,36 @@ REGLAS
 }
 
 function promptFeedback() {
-  return `Eres un coach experto en conversaciones de liderazgo y en los modelos GROW, SBI y CEDAR. Recibirás el diseño de una conversación (la pauta que preparó el/la participante) y la transcripción de su práctica con una persona simulada. Evalúa SOLO la intervención del/la participante.
+  return `Eres un coach cercano, claro y concreto, experto en conversaciones de liderazgo y en los modelos GROW, SBI y CEDAR. Recibirás la pauta que preparó el/la participante y la transcripción de su práctica con una persona simulada. Evalúa SOLO la intervención del/la participante.
+
+La pregunta de fondo es simple: ¿la conversación funcionó o no, y se siguieron los pasos del modelo o no? Sé concreto/a y basa cada puntaje SOLO en lo que realmente está escrito en la transcripción. No supongas intenciones ni des puntos por lo que "se entiende que quiso hacer". Tampoco busques perfección: no bajes puntaje por detalles de estilo, redacción o por no usar las palabras exactas del modelo.
 
 Evalúa estos 5 aspectos, en este orden y con estos nombres exactos:
-1. "Planteamiento de la situación": qué tan bien abrió y encuadró el tema y el propósito de la conversación.
-2. "Claridad de lo observado": qué tan concretos, observables y sin juicios fueron los hechos que nombró.
-3. "Conversación, indagación y apertura": preguntas, escucha y disposición a incorporar la mirada de la otra persona.
-4. "Uso del modelo elegido": qué tanto siguió los pasos del modelo (GROW, SBI o CEDAR) de forma natural.
-5. "Cierre de la conversación": si terminó con un acuerdo o definición clara (qué, quién, cuándo).
+1. "Planteamiento de la situación": abrió el tema y dejó claro de qué y para qué conversaban. Un saludo o una charla social no cuenta como planteamiento.
+2. "Claridad de lo observado": nombró hechos o ejemplos concretos, no solo opiniones o generalidades.
+3. "Conversación, indagación y apertura": hizo preguntas y dio espacio a la mirada de la otra persona.
+4. "Uso del modelo elegido": recorrió los pasos del modelo (te los indico en el mensaje). Este puntaje debe ser coherente con los pasos que marques como cumplidos: si cumplió casi todos, alto; si cumplió pocos, bajo.
+5. "Cierre de la conversación": hay un acuerdo o definición explícita (qué, quién, cuándo, aunque sea simple), propuesta o confirmada por el/la participante. Si no hay ningún acuerdo o definición en la transcripción, el puntaje es 0. Despedirse, agradecer o resumir lo conversado no es un cierre.
 
-Criterios:
-- Puntaje de 0 a 100 por aspecto, SIN ser demasiado riguroso: es un ejercicio de práctica. Reconoce la intención y los aciertos; con una intención clara, el rango habitual es 60–85. Baja de 40 solo si el aspecto casi no aparece; sube de 90 solo si es sólido.
-- Si la conversación quedó incompleta (por ejemplo, sin cierre), refléjalo en ese aspecto pero sin castigar el resto.
-- Cada comentario: 1 o 2 líneas, específico, apoyado en lo que realmente dijo el/la participante, en segunda persona (tú), tono cercano y constructivo.
-- Entrega exactamente 3 tips accionables para una próxima conversación.
+Cómo puntuar (según evidencia):
+- 0: el aspecto no aparece en absoluto en la transcripción.
+- 20 a 50: aparece de forma muy leve, confusa o solo implícita.
+- 55 a 75: aparece, pero le falta algo importante para cumplir su función.
+- 80 a 100: aparece y cumple su función. Si la conversación abrió bien, exploró, siguió los pasos y cerró con un acuerdo, los puntajes deben ser altos aunque haya detalles mejorables.
+- Si la conversación es corta o quedó a medias, los aspectos que no alcanzaron a ocurrir se puntúan según esta escala (por ejemplo, 0 en cierre), y no afectan a los demás.
+
+Cómo comentar:
+- Cada comentario tiene 1 o 2 líneas, en segunda persona (tú), tono cálido y simple.
+- Parte diciendo claramente si eso funcionó o se cumplió, apoyándote en lo que el/la participante dijo. Si hay algo para mejorar, agrégalo en una frase corta.
+
+Además:
+- "veredicto": una sola frase que diga si la conversación funcionó (por ejemplo: "Tu conversación funcionó: lograste ..." / "Funcionó en parte: ..." / "Aún no funciona del todo: ...").
+- "pasos": una entrada por cada paso del modelo, en el mismo orden en que te los indico, con "cumple" true si ese paso apareció de forma reconocible en la conversación y false si no.
+- "tips": exactamente 3, cortos, simples y accionables para la próxima conversación.
 - Todo en español.
 
 Responde ÚNICAMENTE con JSON válido, sin texto adicional ni bloques de código, con esta forma:
-{"aspectos":[{"nombre":"Planteamiento de la situación","puntaje":0,"comentario":""},{"nombre":"Claridad de lo observado","puntaje":0,"comentario":""},{"nombre":"Conversación, indagación y apertura","puntaje":0,"comentario":""},{"nombre":"Uso del modelo elegido","puntaje":0,"comentario":""},{"nombre":"Cierre de la conversación","puntaje":0,"comentario":""}],"tips":["","",""]}`;
+{"veredicto":"","aspectos":[{"nombre":"Planteamiento de la situación","puntaje":0,"comentario":""},{"nombre":"Claridad de lo observado","puntaje":0,"comentario":""},{"nombre":"Conversación, indagación y apertura","puntaje":0,"comentario":""},{"nombre":"Uso del modelo elegido","puntaje":0,"comentario":""},{"nombre":"Cierre de la conversación","puntaje":0,"comentario":""}],"pasos":[{"paso":"","cumple":true}],"tips":["","",""]}`;
 }
 
 function mensajeFeedback(c, msgs) {
@@ -107,6 +126,7 @@ function mensajeFeedback(c, msgs) {
     .map(m => `${m.role === 'user' ? 'PARTICIPANTE' : c.nombre.toUpperCase()}: ${m.content}`)
     .join('\n');
   return `MODELO ELEGIDO: ${MODELOS[c.modelo]}
+PASOS DEL MODELO (devuélvelos en este orden en "pasos"): ${PASOS[c.modelo].join(', ')}
 ${c.tipoFeedback ? `TIPO DE FEEDBACK: ${c.tipoFeedback}\n` : ''}PERSONA: ${c.nombre}
 SITUACIÓN: ${c.situacion}
 
@@ -171,8 +191,7 @@ module.exports = async (req, res) => {
       const texto = await llamarClaude({
         system: promptFeedback(),
         messages: [{ role: 'user', content: mensajeFeedback(contexto, msgs) }],
-        max_tokens: 1500,
-        temperature: 0.4
+        max_tokens: 1800
       });
       const ini = texto.indexOf('{');
       const fin = texto.lastIndexOf('}');
